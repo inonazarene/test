@@ -8,7 +8,7 @@
                 <div class="panel-heading"> Upload Photo</div>
 
                 <div class="panel-body">
-                    @if (session('status'))
+                    @if (session('success'))
                         <div class="alert alert-success">
                             {{ session('status') }}
                         </div>
@@ -18,7 +18,7 @@
                             {{csrf_field()}}
                             <div class="form-group">
                                 <label for="">Image</label>
-                                <input type="file" name="filename" class="form-control">
+                                <input type="file" name="file" class="form-control">
                             </div>
                             <button type="submit" class="btn  btn-success">Upload</button>
 
