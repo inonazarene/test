@@ -16,7 +16,7 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware('auth')->except('show');
     }
 
     /**
@@ -26,7 +26,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        return view('welcome');
     }
 
     public function store(Request $request)
@@ -64,5 +64,13 @@ class HomeController extends Controller
 
         return back()->with('success','Photo has been uploaded.');
 
+    }
+
+    public function show(Request $request)
+    {
+        $skip = $request->skip;
+        $photos = Photo::skip($skip)->take(2)->get();
+
+        return response()->json($photos);
     }
 }
