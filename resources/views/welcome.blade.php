@@ -26,7 +26,7 @@
                             <form action="{{route('photo.upload')}}" method="post" enctype="multipart/form-data">
                                 {{csrf_field()}}
                                 {{--<div class="fallback">--}}
-                                    {{--<input name="file" type="file" multiple/>--}}
+                                {{--<input name="file" type="file" multiple/>--}}
                                 {{--</div>--}}
                                 <div class="form-group">
                                     <label for="">Image</label>
@@ -41,7 +41,14 @@
         @endif
         <div class="row">
             <div class="col-md-12">
-                <ul class="list-unstyled" id="photo-list"></ul>
+                <section class="panel pane-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">Photo Gallery</h4>
+                    </div>
+                    <div class="panel-body">
+                        <ul class="list-unstyled" id="photo-list"></ul>
+                    </div>
+                </section>
             </div>
         </div>
     </section>
@@ -57,7 +64,8 @@
 
 
             $(window).scroll(function () {
-                if ($(window).scrollTop() == $(document).height() - $(window).height()) {
+                // if ($(window).scrollTop() == $(document).height() - $(window).height()) {
+                if ($(window).scrollTop() + $(window).height() > $(document).height() - 100) {
 
                     load_photo(skip += 2);
                 }
