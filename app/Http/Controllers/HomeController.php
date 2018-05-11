@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\PhotoTag;
+use Image;
 use App\Photo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
+
 
 class HomeController extends Controller
 {
@@ -16,7 +18,7 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth')->except('show');
+//        $this->middleware('auth')->except('show');
     }
 
     /**
@@ -41,36 +43,46 @@ class HomeController extends Controller
 
             $file = $request->file('file');
 
+
             $image_extension = $file->clientExtension();
 
             $image = $user->name.'_'.uniqid().'.'.$image_extension;
 
             $image_location ='public/photo';
+            $file = Image::make($file)->resize(768, 1024);
+
 
             $request->file->storeAs($image_location, $image);
 
-            list($width, $height) = getimagesize($file);
-
-
             Photo::create([
                 'filename'=>'/photo/'.$image,
-                'filesize'=>formatSizeUnits($file->getClientSize()),
+                'filesize'=>formatSizeUnits($file->filesize()),
                 'user_id'=>$user->user_id,
-                'width'=>$width,
-                'height'=>$height
+                'width'=>$file->width(),
+                'height'=>$file->height()
             ]);
 
         }
 
-        return back()->with('success','Photo has been uploaded.');
+        return ['success'=>'Photo has been uploaded.'];
 
+    }
+    public function storeTags(Request $request)
+    {
+        $request->validate([
+            'tag'=>'required|alpha|max:255|min:3'
+        ]);
+
+        $tag = PhotoTag::create($request->all());
+
+        return back();
     }
 
     public function show(Request $request)
     {
         $skip = $request->skip;
-        $photos = Photo::skip($skip)->take(2)->get();
+        $photos = Photo::with('tags')->skip($skip)->take(10)->get();
 
-        return response()->json($photos);
+        return $photos->toArray();
     }
 }

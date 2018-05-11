@@ -12,6 +12,11 @@
 */
 
 Route::get('/', function () {
+
+//   $photo = \App\Photo::with('tags')->get();
+
+//   dd($photo);
+
     return view('welcome');
 });
 
@@ -20,3 +25,5 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 Route::post('/home/store','HomeController@store')->name('photo.upload');
 Route::get('/home/photo','HomeController@show')->name('photo.show');
+
+Route::post('/home/store_tags','HomeController@storeTags')->name('tag.store');
