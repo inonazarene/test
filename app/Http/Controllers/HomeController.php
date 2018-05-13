@@ -46,16 +46,18 @@ class HomeController extends Controller
 
             $image_extension = $file->clientExtension();
 
-            $image = $user->name.'_'.uniqid().'.'.$image_extension;
+            $name = str_replace('', '_', $user->name);
 
-            $image_location ='public/photo';
+            $image = $name.'_'.uniqid().'.'.$image_extension;
+
+            // $image_location ='public/photos';
             $file = Image::make($file)->resize(768, 1024);
 
 
-            $request->file->storeAs($image_location, $image);
+            $request->file->move(public_path('photos'), $image);
 
             Photo::create([
-                'filename'=>'/photo/'.$image,
+                'filename'=>'/photos/'.$image,
                 'filesize'=>formatSizeUnits($file->filesize()),
                 'user_id'=>$user->user_id,
                 'width'=>$file->width(),

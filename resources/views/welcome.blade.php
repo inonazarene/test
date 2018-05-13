@@ -54,7 +54,7 @@
 @endsection
 
 @section('script')
-    {{--<script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.4.0/min/dropzone-amd-module.min.js"></script>--}}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.4.0/min/dropzone-amd-module.min.js"></script>
     <script>
 
         $(function () {
@@ -111,18 +111,28 @@
 
                     $.each(data, function (index, data) {
 
+
+
                         if (data != null) {
-                            var file = '{{asset('storage/')}}' + data.filename;
+                            var file = '{{asset('photos')}}' +'/'+data.filename;
+                            var error = '{{$errors->first('tag') }}';
+                            var  value = '{{ old('tag') }}';
 
                             var html = '<li class="col-xs-12 col-sm-6 col-md-4 img style="display: inline-block">';
-                            html += '<div class="thumbnail">';
+                            html += '<div class="thumbnail">';  
                             html += '<img class="img-responsive img-thumbnail" src="' + file + '">';
                             html += '<div class="caption">';
                             html += '<form class="form-inline" method="post" action="{{route('tag.store')}}">';
                             html += '{{csrf_field()}}';
                             html += '<input type="hidden" name="photo_id" value="'+data.photo_id+'">';
                             html += '<div class="form-group">';
-                            html += '<input class="form-control" name="tag" autocomplete="off" placeholder="enter tags" data-role="tagsinput">';
+                            html += '<input class="form-control" name="tag" autocomplete="off" value="'+value+'" placeholder="enter tags" data-role="tagsinput">';
+                            html += '@if ($errors->has('tag'))';
+                            html += '<span class="help-block">';
+                            html += '<strong>'+error+'</strong>';
+                            html += '</span>';
+                            html += ' @endif';
+                               
                             html += '</div>';
                             html += '<button type="submit" class="btn btn-success btn-sm"> submit</button>';
                             html += '</form>';
